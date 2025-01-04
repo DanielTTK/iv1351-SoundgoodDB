@@ -28,6 +28,7 @@ import java.sql.*;
 public class SoundgoodDAO {
 
     private Connection connection;
+    private PreparedStatement updateRentalToExpiryStmt;
 
     /**
      * Constructs a new DAO object connected to the Soundgood database.
@@ -39,6 +40,46 @@ public class SoundgoodDAO {
             connectToDatabase();
         } catch (SQLException exception) {
             throw new SoundgoodDBException("could not connect to datasource.", exception);
+        }
+    }
+
+    /**
+     * Deletes a rental by updating the lease date to expiry, and from that removes
+     * the lease. Rental deletion through forced expiry is preferred due to the
+     * database saving of historical data. Direct deletion does not make use of
+     * database
+     * functionality.
+     */
+    public void deleteRental(String rentalId) throws SoundgoodDBException {
+        String failureMsg = "Failed to terminate rental: " + rentalId;
+
+        try {
+            updateRentalToExpiryStmt.setString(1, rentalId);
+            updateRentalToExpiryStmt.executeUpdate();
+
+            connection.commit();
+        } catch (SQLException sqle) {
+            handleException(failureMsg, sqle);
+        }
+    }
+
+    /**
+     * Handles exceptions and rolls back transactions.
+     */
+    private void handleException(String failureMsg, Exception cause) throws SoundgoodDBException {
+        try {
+            connection.rollback();
+        } catch (SQLException rollbackExc) {
+            failureMsg += " Also failed to rollback transaction: " + rollbackExc.getMessage();
+        }
+        throw new SoundgoodDBException(failureMsg, cause);
+    }
+
+    public void commit() throws SoundgoodDBException {
+        try {
+            connection.commit();
+        } catch (SQLException e) {
+            handleException("Failed to commit", e);
         }
     }
 
@@ -63,6 +104,8 @@ public class SoundgoodDAO {
          * + " WHERE " + ACCT_NO_COLUMN_NAME + " = ?");
          */
 
+        updateRentalToExpiryStmt = connection.prepareStatement(
+                "UPDATE instrument_rental SET lease_expiry_time = CURRENT_TIMESTAMP WHERE rental_id = ?");
     }
 
     /**
