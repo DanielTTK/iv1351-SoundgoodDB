@@ -28,4 +28,34 @@ package se.kth.iv1351.soundgood.jdbc.model;
  */
 public class Rental implements RentalDTO {
 
+    @Override
+    public String getRentalID() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'getRentalID'");
+    }
+
+    @Override
+    public String getStartDate() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'getStartDate'");
+    }
+
+    @Override
+    public String getExpiryDate() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'getExpiryDate'");
+    }
+
+    @Override
+    public String getInstrument() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'getInstrument'");
+    }
+
+    @Override
+    public int getRentalCostID() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'getRentalCostID'");
+    }
+
 }

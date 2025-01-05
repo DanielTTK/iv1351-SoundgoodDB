@@ -25,6 +25,9 @@ package se.kth.iv1351.soundgood.jdbc.integration;
 
 import java.sql.*;
 
+import se.kth.iv1351.soundgood.jdbc.model.RentalDTO;
+import se.kth.iv1351.soundgood.jdbc.model.RentalException;
+
 public class SoundgoodDAO {
 
     private Connection connection;
@@ -41,6 +44,10 @@ public class SoundgoodDAO {
         } catch (SQLException exception) {
             throw new SoundgoodDBException("could not connect to datasource.", exception);
         }
+    }
+
+    public void createRental(RentalDTO rental) throws SoundgoodDBException {
+
     }
 
     /**
