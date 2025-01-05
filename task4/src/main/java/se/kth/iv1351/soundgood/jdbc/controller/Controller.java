@@ -20,7 +20,7 @@ public class Controller {
         }
 
         try {
-            database.createRental(new Rental());
+            database.createRental(new Instrument());
         } catch (Exception e) {
             throw new RentalException(failureMsg, e);
         }
