@@ -83,7 +83,7 @@ public class SoundgoodDAO {
         }
     }
 
-    private void prepareStatements() throws SQLException {
+    private void prepareStatements(Connection connection) throws SQLException {
         /*
          * Examples:
          * createAccountStmt = connection.prepareStatement("INSERT INTO " +
@@ -105,7 +105,7 @@ public class SoundgoodDAO {
          */
 
         updateRentalToExpiryStmt = connection.prepareStatement(
-                "UPDATE instrument_rental SET lease_expiry_time = CURRENT_TIMESTAMP WHERE rental_id = ?");
+                "UPDATE instrument_rental SET lease_expiry_time = CURRENT_TIMESTAMP(0) WHERE rental_id = ?");
     }
 
     /**
@@ -116,5 +116,6 @@ public class SoundgoodDAO {
                 "jdbc:postgresql://localhost:5432/soundgood",
                 "postgres", "kth");
         connection.setAutoCommit(false);
+        prepareStatements(connection);
     }
 }

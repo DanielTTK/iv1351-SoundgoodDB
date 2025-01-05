@@ -23,29 +23,27 @@
 
 package se.kth.iv1351.soundgood.jdbc.model;
 
-public interface RentalDTO {
-    /**
-     * @return The rental ID.
-     */
-    public String getRentalID();
+/**
+ * Thrown when a call to the bank database fails.
+ */
+public class RentalException extends Exception {
 
     /**
-     * @return rental start date.
+     * Create a new instance thrown because of the specified reason.
+     *
+     * @param reason Why the exception was thrown.
      */
-    public String getStartDate();
+    public RentalException(String reason) {
+        super(reason);
+    }
 
     /**
-     * @return rental expiry date.
+     * Create a new instance thrown because of the specified reason and exception.
+     *
+     * @param reason    Why the exception was thrown.
+     * @param rootCause The exception that caused this exception to be thrown.
      */
-    public String getExpiryDate();
-
-    /**
-     * @return rented instrument.
-     */
-    public String getInstrument();
-
-    /**
-     * @return The cost of the rental.
-     */
-    public int getRentalCostID();
+    public RentalException(String reason, Throwable rootCause) {
+        super(reason, rootCause);
+    }
 }
