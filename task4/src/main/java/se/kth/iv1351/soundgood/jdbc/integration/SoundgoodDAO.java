@@ -25,6 +25,7 @@ package se.kth.iv1351.soundgood.jdbc.integration;
 
 import java.sql.*;
 
+import se.kth.iv1351.soundgood.jdbc.model.InstrumentDTO;
 import se.kth.iv1351.soundgood.jdbc.model.RentalDTO;
 import se.kth.iv1351.soundgood.jdbc.model.RentalException;
 
@@ -46,8 +47,8 @@ public class SoundgoodDAO {
         }
     }
 
-    public void createRental(RentalDTO rental) throws SoundgoodDBException {
-
+    public void createRental(InstrumentDTO instrument) throws SoundgoodDBException {
+        String failureMsg = "Could not rent the instrument " + instrument;
     }
 
     /**
