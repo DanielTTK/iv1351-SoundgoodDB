@@ -54,9 +54,6 @@ public class SoundgoodDAO {
     private static final String AVAILABLE_STOCK_COLUMN_NAME = "available_stock";
 
     private static final String RENTAL_PRICE_HISTORY_TABLE_NAME = "rental_price_history";
-    private static final String RENTAL_PRICE_ID_COLUMN_NAME = "rental_price_id";
-    private static final String START_DATE_PRICE_COLUMN_NAME = "start_date";
-    private static final String END_DATE_PRICE_COLUMN_NAME = "end_date";
     private static final String IS_CURRENT_COLUMN_NAME = "is_current";
     private static final String PRICE_COLUMN_NAME = "price";
 
@@ -177,7 +174,6 @@ public class SoundgoodDAO {
         }
     }
 
-    // consider locking..
     private String findGreatestRentalID() throws SQLException {
         ResultSet result = null;
         result = findMaxRentalIdStmt.executeQuery();
@@ -207,6 +203,11 @@ public class SoundgoodDAO {
         throw new SoundgoodDBException(failureMsg, cause);
     }
 
+    /**
+     * Commits the transaction.
+     * 
+     * @throws SoundgoodDBException If failed to commit.
+     */
     public void commit() throws SoundgoodDBException {
         try {
             connection.commit();

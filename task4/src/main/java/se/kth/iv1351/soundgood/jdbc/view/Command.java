@@ -22,36 +22,27 @@
  * THE SOFTWARE.
  */
 
-package se.kth.iv1351.bankjdbc.view;
+package se.kth.iv1351.soundgood.jdbc.view;
 
 /**
  * Defines all commands that can be performed by a user of the chat application.
  */
 public enum Command {
     /**
-     * Creates a new account.
-     */
-    NEW,
-    /**
-     * Lists all existing accounts.
+     * Lists all available instruments.
      */
     LIST,
+
     /**
-     * Deletes the specified account.
+     * Rents an instrument.
      */
-    DELETE,
+    RENT,
+
     /**
-     * Deposits the specified amount to the specified account
+     * Terminates the a rental.
      */
-    DEPOSIT,
-    /**
-     * Withdraws the specified amount from the specified account
-     */
-    WITHDRAW,
-    /**
-     * Lists the balance of the specified account.
-     */
-    BALANCE,
+    TERMINATE,
+
     /**
      * Lists all commands.
      */
@@ -63,5 +54,6 @@ public enum Command {
     /**
      * None of the valid commands above was specified.
      */
-    ILLEGAL_COMMAND
+    ILLEGAL_COMMAND;
+
 }

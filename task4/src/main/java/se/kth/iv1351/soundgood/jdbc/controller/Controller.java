@@ -1,5 +1,7 @@
 package se.kth.iv1351.soundgood.jdbc.controller;
 
+import java.util.List;
+
 import se.kth.iv1351.soundgood.jdbc.integration.*;
 import se.kth.iv1351.soundgood.jdbc.model.*;
 
@@ -22,6 +24,20 @@ public class Controller {
 
         try {
             database.createRental(new Rental(rentalID), new Instrument(instrumentID), new Student(studentID), priceID);
+        } catch (Exception e) {
+            throw new RentalException(failureMsg, e);
+        }
+    }
+
+    public List<Instrument> listInstrumentsByType(String instrumentType) throws SoundgoodDBException {
+        return database.findInstrumentsByType(instrumentType);
+    }
+
+    public void terminateRental(String rentalID) throws RentalException {
+        String failureMsg = "Could not terminate rental " + rentalID;
+        try {
+            Rental rental = new Rental(rentalID);
+            database.deleteRental(rental);
         } catch (Exception e) {
             throw new RentalException(failureMsg, e);
         }
