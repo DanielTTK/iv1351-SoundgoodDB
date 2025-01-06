@@ -42,5 +42,5 @@ public interface InstrumentDTO {
     /**
      * @return amount of said instrument available in stock.
      */
-    public String getInstrumentsInStock();
+    public int getInstrumentsInStock();
 }

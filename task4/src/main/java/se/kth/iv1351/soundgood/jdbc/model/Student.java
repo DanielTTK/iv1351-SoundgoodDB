@@ -23,45 +23,26 @@
 
 package se.kth.iv1351.soundgood.jdbc.model;
 
-public class Instrument implements InstrumentDTO {
-    private String instrId;
-    private String instrType;
-    private String instrBrand;
-    private int instrInStock;
+/**
+ * A object representing a student.
+ */
+public class Student implements StudentDTO {
 
-    public Instrument(String instrId, String instrType, String instrBrand, int instrInStock) {
-        this.instrId = instrId;
-        this.instrType = instrType;
-        this.instrBrand = instrBrand;
-        this.instrInStock = instrInStock;
-    }
-
-    public Instrument(String instrId) {
-        this(instrId, null, null, 0);
+    @Override
+    public String getStudentID() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'getRentalID'");
     }
 
     @Override
-    public String getInstrumentID() {
+    public String getPersonID() {
         // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getInstrumentID'");
+        throw new UnsupportedOperationException("Unimplemented method 'getStartDate'");
     }
 
     @Override
-    public String getInstrumentType() {
+    public String getSkillLevel() {
         // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getInstrumentType'");
+        throw new UnsupportedOperationException("Unimplemented method 'getExpiryDate'");
     }
-
-    @Override
-    public String getInstrumentBrand() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getInstrumentBrand'");
-    }
-
-    @Override
-    public int getInstrumentsInStock() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getInstrumentsInStock'");
-    }
-
 }

@@ -26,13 +26,16 @@ package se.kth.iv1351.soundgood.jdbc.integration;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 
+import se.kth.iv1351.soundgood.jdbc.model.IDGenerator;
 import se.kth.iv1351.soundgood.jdbc.model.InstrumentDTO;
 import se.kth.iv1351.soundgood.jdbc.model.RentalDTO;
+import se.kth.iv1351.soundgood.jdbc.model.StudentDTO;
 
 public class SoundgoodDAO {
-    // instrument_id, student_id) "
     private static final String RENTAL_TABLE_NAME = "instrument_rental";
     private static final String EXPIRY_DATE_COLUMN_NAME = "lease_expiry_time";
     private static final String START_DATE_COLUMN_NAME = "rental_start_time";
@@ -43,7 +46,7 @@ public class SoundgoodDAO {
 
     private Connection connection;
     private PreparedStatement updateRentalToExpiryStmt;
-    private PreparedStatement createRentalByInstrumentStmt;
+    private PreparedStatement createRentalStmt;
     private PreparedStatement findMaxRentalIdStmt;
 
     /**
@@ -59,22 +62,54 @@ public class SoundgoodDAO {
         }
     }
 
-    public void createRental(RentalDTO rental, InstrumentDTO instrument) throws SoundgoodDBException {
-        String failureMsg = "Could not rent the instrument " + instrument;
+    /**
+     * Creates a new rental
+     * 
+     * @param rental     the rental object.
+     * @param instrument the instrument object.
+     * @param student    the student object.
+     * @param priceID    the priceID for said instrument. This is free to choose.
+     * @throws SoundgoodDBException If failed to create the specific rental.
+     */
+    public void createRental(RentalDTO rental, InstrumentDTO instrument, StudentDTO student, String priceID)
+            throws SoundgoodDBException {
+        String failureMsg = "Could not rent the instrument " + instrument.getInstrumentID()
+                + " for student " + student.getStudentID();
+
+        Timestamp expectedLeaseStartDate = new Timestamp(System.currentTimeMillis());
+        Timestamp expectedLeaseEndDate = new Timestamp(System.currentTimeMillis() + 30L * 24 * 60 * 60 * 1000);
 
         try {
-            // findMaxRentalIdStmt.
-        } catch (Exception e) {
+            String greatestID = findGreatestRentalID();
+            String nextID = IDGenerator.generateId(greatestID);
+            int updatedRows = 0;
 
+            createRentalStmt.setString(1, nextID);
+            createRentalStmt.setTimestamp(2, expectedLeaseStartDate);
+            createRentalStmt.setTimestamp(3, expectedLeaseEndDate);
+            createRentalStmt.setString(4, priceID);
+            createRentalStmt.setString(5, instrument.getInstrumentID());
+            createRentalStmt.setString(6, student.getStudentID());
+
+            updatedRows = createRentalStmt.executeUpdate();
+            if (updatedRows != 1) {
+                handleException(failureMsg, null);
+            }
+
+            connection.commit();
+
+        } catch (SQLException sqle) {
+            handleException(failureMsg, sqle);
         }
     }
 
     /**
      * Deletes a rental by updating the lease date to expiry, and from that removes
      * the lease. Rental deletion through forced expiry is preferred due to the
-     * database saving of historical data. Direct deletion does not make use of
-     * database
-     * functionality.
+     * database saving of historical data.
+     * 
+     * @param rental the rental object.
+     * @throws SoundgoodDBException Thrown if deletion failed.
      */
     public void deleteRental(RentalDTO rental) throws SoundgoodDBException {
         String failureMsg = "Failed to terminate rental: " + rental.getRentalID();
@@ -89,6 +124,24 @@ public class SoundgoodDAO {
             connection.commit();
         } catch (SQLException sqle) {
             handleException(failureMsg, sqle);
+        }
+    }
+
+    // consider locking..
+    private String findGreatestRentalID() throws SQLException {
+        ResultSet result = null;
+        result = findMaxRentalIdStmt.executeQuery();
+        if (result.next()) {
+            return result.getString("max_rental_id");
+        }
+        return "";
+    }
+
+    private void closeResultSet(String failureMsg, ResultSet result) throws SoundgoodDBException {
+        try {
+            result.close();
+        } catch (Exception e) {
+            throw new SoundgoodDBException(failureMsg + " Could not close result set...", e);
         }
     }
 
@@ -133,11 +186,11 @@ public class SoundgoodDAO {
          * + " WHERE " + ACCT_NO_COLUMN_NAME + " = ?");
          */
 
-        updateRentalToExpiryStmt = connection.prepareStatement(
+        updateRentalToExpiryStmt = connection.prepareStatement( // consider a lock here
                 "UPDATE " + RENTAL_TABLE_NAME + " SET " + EXPIRY_DATE_COLUMN_NAME
                         + " = CURRENT_TIMESTAMP(0) WHERE " + RENTAL_ID_COLUMN_NAME + " = ?");
 
-        createRentalByInstrumentStmt = connection.prepareStatement(
+        createRentalStmt = connection.prepareStatement(
                 "INSERT INTO " + RENTAL_TABLE_NAME
                         + " (" + RENTAL_ID_COLUMN_NAME
                         + ", " + START_DATE_COLUMN_NAME

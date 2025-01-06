@@ -12,15 +12,16 @@ public class Controller {
         database = new SoundgoodDAO();
     }
 
-    public void createRental(String instrumentID) throws RentalException, InstrumentException {
-        String failureMsg = "Could not create a rental for student: " + instrumentID;
+    public void createRental(String rentalID, String instrumentID, String studentID, String priceID)
+            throws RentalException, InstrumentException {
+        String failureMsg = "Could not create rental " + rentalID + " for student " + studentID;
 
         if (instrumentID == null) {
             throw new InstrumentException(failureMsg);
         }
 
         try {
-            database.createRental(new Rental(), new Instrument());
+            database.createRental(new Rental(rentalID), new Instrument(instrumentID), new Student(studentID), priceID);
         } catch (Exception e) {
             throw new RentalException(failureMsg, e);
         }
