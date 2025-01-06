@@ -272,7 +272,7 @@ public class SoundgoodDAO {
      */
     void connectToDatabase() throws SQLException {
         connection = DriverManager.getConnection(
-                "jdbc:postgresql://localhost:5432/soundgood",
+                "jdbc:postgresql://localhost:5432/soundgood_school",
                 "postgres", "kth");
         connection.setAutoCommit(false);
         prepareStatements(connection);

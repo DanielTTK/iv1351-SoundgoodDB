@@ -56,4 +56,18 @@ public class Student implements StudentDTO {
     public String getSkillLevel() {
         return skillLevel;
     }
+
+    @Override
+    public String toString() {
+        StringBuilder stringRepresentation = new StringBuilder();
+        stringRepresentation.append("Student: [");
+        stringRepresentation.append("Student ID: ");
+        stringRepresentation.append(studentID);
+        stringRepresentation.append(", Person ID: ");
+        stringRepresentation.append(personID);
+        stringRepresentation.append(", Skill Level: ");
+        stringRepresentation.append(skillLevel);
+        stringRepresentation.append("]");
+        return stringRepresentation.toString();
+    }
 }

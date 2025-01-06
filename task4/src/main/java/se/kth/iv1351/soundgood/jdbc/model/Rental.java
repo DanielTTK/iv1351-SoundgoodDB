@@ -77,4 +77,20 @@ public class Rental implements RentalDTO {
     public String getPriceID() {
         return priceID;
     }
+
+    @Override
+    public String toString() {
+        StringBuilder stringRepresentation = new StringBuilder();
+        stringRepresentation.append("Rental: [");
+        stringRepresentation.append("Rental ID: ");
+        stringRepresentation.append(rentalID);
+        stringRepresentation.append(", Student ID: ");
+        stringRepresentation.append(studentID);
+        stringRepresentation.append(", Instrument ID: ");
+        stringRepresentation.append(instrumentID);
+        stringRepresentation.append(", Price ID: ");
+        stringRepresentation.append(priceID);
+        stringRepresentation.append("]");
+        return stringRepresentation.toString();
+    }
 }

@@ -67,4 +67,22 @@ public class Instrument implements InstrumentDTO {
     public BigDecimal getPrice() {
         return price;
     }
+
+    @Override
+    public String toString() {
+        StringBuilder stringRepresentation = new StringBuilder();
+        stringRepresentation.append("Instrument: [");
+        stringRepresentation.append("ID: ");
+        stringRepresentation.append(instrId);
+        stringRepresentation.append(", Type: ");
+        stringRepresentation.append(instrType);
+        stringRepresentation.append(", Brand: ");
+        stringRepresentation.append(instrBrand);
+        stringRepresentation.append(", Available Stock: ");
+        stringRepresentation.append(instrInStock);
+        stringRepresentation.append(", Price: ");
+        stringRepresentation.append(price);
+        stringRepresentation.append("]");
+        return stringRepresentation.toString();
+    }
 }
