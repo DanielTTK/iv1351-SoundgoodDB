@@ -27,35 +27,54 @@ package se.kth.iv1351.soundgood.jdbc.model;
  * A rental representing a lease for an instrument by a student
  */
 public class Rental implements RentalDTO {
+    private String rentalID;
+    private String startDate;
+    private String expiryDate;
+    private String studentID;
+    private String instrumentID;
+    private String priceID;
+
+    public Rental(String rentalID, String startDate, String expiryDate, String priceID, String instrumentID,
+            String studentID) {
+        this.rentalID = rentalID;
+        this.startDate = startDate;
+        this.expiryDate = expiryDate;
+        this.studentID = studentID;
+        this.instrumentID = instrumentID;
+        this.priceID = priceID;
+    }
+
+    public Rental(String rentalID) {
+        this(rentalID, null, null, null, null, null);
+    }
 
     @Override
     public String getRentalID() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getRentalID'");
+        return rentalID;
     }
 
     @Override
     public String getStartDate() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getStartDate'");
+        return startDate;
     }
 
     @Override
     public String getExpiryDate() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getExpiryDate'");
+        return expiryDate;
     }
 
     @Override
-    public String getInstrument() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getInstrument'");
+    public String getStudentID() {
+        return studentID;
     }
 
     @Override
-    public int getRentalCostID() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getRentalCostID'");
+    public String getInstrumentID() {
+        return instrumentID;
     }
 
+    @Override
+    public String getPriceID() {
+        return priceID;
+    }
 }

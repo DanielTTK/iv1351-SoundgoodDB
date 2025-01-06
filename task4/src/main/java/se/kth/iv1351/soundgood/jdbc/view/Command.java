@@ -22,25 +22,46 @@
  * THE SOFTWARE.
  */
 
-package se.kth.iv1351.soundgood.jdbc.startup;
-
-import se.kth.iv1351.soundgood.jdbc.controller.Controller;
-import se.kth.iv1351.soundgood.jdbc.integration.SoundgoodDBException;
-import se.kth.iv1351.soundgood.jdbc.view.BlockingInterpreter;
+package se.kth.iv1351.bankjdbc.view;
 
 /**
- * Starts the school client.
+ * Defines all commands that can be performed by a user of the chat application.
  */
-public class Main {
+public enum Command {
     /**
-     * @param args There are no command line arguments.
+     * Creates a new account.
      */
-    public static void main(String[] args) {
-        try {
-            new BlockingInterpreter(new Controller()).handleCmds();
-        } catch (SoundgoodDBException sgdbe) {
-            System.out.println("Could not connect to soudgood db.");
-            sgdbe.printStackTrace();
-        }
-    }
+    NEW,
+    /**
+     * Lists all existing accounts.
+     */
+    LIST,
+    /**
+     * Deletes the specified account.
+     */
+    DELETE,
+    /**
+     * Deposits the specified amount to the specified account
+     */
+    DEPOSIT,
+    /**
+     * Withdraws the specified amount from the specified account
+     */
+    WITHDRAW,
+    /**
+     * Lists the balance of the specified account.
+     */
+    BALANCE,
+    /**
+     * Lists all commands.
+     */
+    HELP,
+    /**
+     * Leave the chat application.
+     */
+    QUIT,
+    /**
+     * None of the valid commands above was specified.
+     */
+    ILLEGAL_COMMAND
 }

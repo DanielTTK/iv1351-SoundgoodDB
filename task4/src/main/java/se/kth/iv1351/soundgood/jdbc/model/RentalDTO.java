@@ -40,12 +40,17 @@ public interface RentalDTO {
     public String getExpiryDate();
 
     /**
-     * @return rented instrument.
-     */
-    public String getInstrument();
-
-    /**
      * @return The cost of the rental.
      */
-    public int getRentalCostID();
+    public String getPriceID();
+
+    /**
+     * @return rented instrument ID.
+     */
+    public String getInstrumentID();
+
+    /**
+     * @return student ID.
+     */
+    public String getStudentID();
 }

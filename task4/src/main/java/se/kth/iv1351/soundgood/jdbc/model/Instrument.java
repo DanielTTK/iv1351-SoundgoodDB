@@ -23,13 +23,16 @@
 
 package se.kth.iv1351.soundgood.jdbc.model;
 
+import java.math.BigDecimal;
+
 public class Instrument implements InstrumentDTO {
     private String instrId;
     private String instrType;
     private String instrBrand;
     private int instrInStock;
+    private BigDecimal price;
 
-    public Instrument(String instrId, String instrType, String instrBrand, int instrInStock) {
+    public Instrument(String instrId, String instrType, String instrBrand, int instrInStock, BigDecimal price) {
         this.instrId = instrId;
         this.instrType = instrType;
         this.instrBrand = instrBrand;
@@ -37,31 +40,31 @@ public class Instrument implements InstrumentDTO {
     }
 
     public Instrument(String instrId) {
-        this(instrId, null, null, 0);
+        this(instrId, null, null, 0, BigDecimal.ZERO);
     }
 
     @Override
     public String getInstrumentID() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getInstrumentID'");
+        return instrId;
     }
 
     @Override
     public String getInstrumentType() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getInstrumentType'");
+        return instrType;
     }
 
     @Override
     public String getInstrumentBrand() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getInstrumentBrand'");
+        return instrBrand;
     }
 
     @Override
     public int getInstrumentsInStock() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getInstrumentsInStock'");
+        return instrInStock;
     }
 
+    @Override
+    public BigDecimal getPrice() {
+        return price;
+    }
 }

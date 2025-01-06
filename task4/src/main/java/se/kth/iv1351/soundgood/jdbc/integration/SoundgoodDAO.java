@@ -29,8 +29,11 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.List;
 
 import se.kth.iv1351.soundgood.jdbc.model.IDGenerator;
+import se.kth.iv1351.soundgood.jdbc.model.Instrument;
 import se.kth.iv1351.soundgood.jdbc.model.InstrumentDTO;
 import se.kth.iv1351.soundgood.jdbc.model.RentalDTO;
 import se.kth.iv1351.soundgood.jdbc.model.StudentDTO;
@@ -44,10 +47,24 @@ public class SoundgoodDAO {
     private static final String INSTR_ID_COLUMN_NAME = "instrument_id";
     private static final String STDNT_ID_COLUMN_NAME = "student_id";
 
+    private static final String INSTRUMENT_TABLE_NAME = "instrument";
+    private static final String INSTRUMENT_ID_COLUMN_NAME = "instrument_id";
+    private static final String INSTRUMENT_TYPE_COLUMN_NAME = "instrument_type";
+    private static final String INSTRUMENT_BRAND_COLUMN_NAME = "instrument_brand";
+    private static final String AVAILABLE_STOCK_COLUMN_NAME = "available_stock";
+
+    private static final String RENTAL_PRICE_HISTORY_TABLE_NAME = "rental_price_history";
+    private static final String RENTAL_PRICE_ID_COLUMN_NAME = "rental_price_id";
+    private static final String START_DATE_PRICE_COLUMN_NAME = "start_date";
+    private static final String END_DATE_PRICE_COLUMN_NAME = "end_date";
+    private static final String IS_CURRENT_COLUMN_NAME = "is_current";
+    private static final String PRICE_COLUMN_NAME = "price";
+
     private Connection connection;
     private PreparedStatement updateRentalToExpiryStmt;
     private PreparedStatement createRentalStmt;
     private PreparedStatement findMaxRentalIdStmt;
+    private PreparedStatement findInstrumentsByTypeStmt;
 
     /**
      * Constructs a new DAO object connected to the Soundgood database.
@@ -60,6 +77,39 @@ public class SoundgoodDAO {
         } catch (SQLException exception) {
             throw new SoundgoodDBException("could not connect to datasource.", exception);
         }
+    }
+
+    /**
+     * Lists all available instruments of a specific type.
+     * 
+     * @param instrumentType the type of instrument to list.
+     * @return a list of available instruments of the specified type.
+     * @throws SoundgoodDBException If failed to list the instruments.
+     */
+    public List<Instrument> findInstrumentsByType(String instrumentType) throws SoundgoodDBException {
+        String failureMsg = "Could not list instruments.";
+        ResultSet result = null;
+        List<Instrument> instruments = new ArrayList<>();
+
+        try {
+            findInstrumentsByTypeStmt.setString(1, instrumentType);
+            result = findInstrumentsByTypeStmt.executeQuery();
+            while (result.next()) {
+                Instrument instrument = new Instrument(
+                        result.getString(INSTRUMENT_ID_COLUMN_NAME),
+                        result.getString(INSTRUMENT_TYPE_COLUMN_NAME),
+                        result.getString(INSTRUMENT_BRAND_COLUMN_NAME),
+                        result.getInt(AVAILABLE_STOCK_COLUMN_NAME),
+                        result.getBigDecimal(PRICE_COLUMN_NAME));
+                instruments.add(instrument);
+            }
+            connection.commit();
+        } catch (SQLException sqle) {
+            handleException(failureMsg, sqle);
+        } finally {
+            closeResultSet(failureMsg, result);
+        }
+        return instruments;
     }
 
     /**
@@ -202,7 +252,18 @@ public class SoundgoodDAO {
                         + "VALUES (?, ?, ?, ?, ?, ?)");
 
         findMaxRentalIdStmt = connection.prepareStatement(
-                "SELECT MAX(rental_id) AS max_rental_id FROM instrument_rental");
+                "SELECT MAX(" + RENTAL_ID_COLUMN_NAME + ") AS max_rental_id FROM" + RENTAL_TABLE_NAME
+                        + " FOR NO KEY UPDATE");
+
+        findInstrumentsByTypeStmt = connection.prepareStatement(
+                "SELECT i." + INSTRUMENT_ID_COLUMN_NAME + ", i." + INSTRUMENT_TYPE_COLUMN_NAME + ", i."
+                        + INSTRUMENT_BRAND_COLUMN_NAME + ", i." + AVAILABLE_STOCK_COLUMN_NAME + ", rph."
+                        + PRICE_COLUMN_NAME + " " +
+                        "FROM " + INSTRUMENT_TABLE_NAME + " i " +
+                        "JOIN " + RENTAL_PRICE_HISTORY_TABLE_NAME + " rph ON i." + INSTRUMENT_ID_COLUMN_NAME + " = rph."
+                        + INSTRUMENT_ID_COLUMN_NAME + " " +
+                        "WHERE i." + INSTRUMENT_TYPE_COLUMN_NAME + " = ? AND i." + AVAILABLE_STOCK_COLUMN_NAME
+                        + " > 0 AND rph." + IS_CURRENT_COLUMN_NAME + " = true FOR NO KEY UPDATE");
     }
 
     /**

@@ -28,21 +28,32 @@ package se.kth.iv1351.soundgood.jdbc.model;
  */
 public class Student implements StudentDTO {
 
+    private String studentID;
+    private String personID;
+    private String skillLevel;
+
+    public Student(String studentID, String personID, String skillLevel) {
+        this.studentID = studentID;
+        this.personID = personID;
+        this.skillLevel = skillLevel;
+    }
+
+    public Student(String studentID) {
+        this(studentID, null, null);
+    }
+
     @Override
     public String getStudentID() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getRentalID'");
+        return studentID;
     }
 
     @Override
     public String getPersonID() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getStartDate'");
+        return personID;
     }
 
     @Override
     public String getSkillLevel() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getExpiryDate'");
+        return skillLevel;
     }
 }

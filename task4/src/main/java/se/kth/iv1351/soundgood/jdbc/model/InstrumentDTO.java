@@ -23,6 +23,8 @@
 
 package se.kth.iv1351.soundgood.jdbc.model;
 
+import java.math.BigDecimal;
+
 public interface InstrumentDTO {
     /**
      * @return the instrument id.
@@ -43,4 +45,9 @@ public interface InstrumentDTO {
      * @return amount of said instrument available in stock.
      */
     public int getInstrumentsInStock();
+
+    /**
+     * @return the price of the instrument.
+     */
+    public BigDecimal getPrice();
 }
