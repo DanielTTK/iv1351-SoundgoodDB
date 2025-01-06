@@ -92,12 +92,25 @@ public class SoundgoodDAO {
             findInstrumentsByTypeStmt.setString(1, instrumentType);
             result = findInstrumentsByTypeStmt.executeQuery();
             while (result.next()) {
+
+                String instrumentId = result.getString(INSTRUMENT_ID_COLUMN_NAME);
+                String instrumentTypeResult = result.getString(INSTRUMENT_TYPE_COLUMN_NAME);
+                String instrumentBrand = result.getString(INSTRUMENT_BRAND_COLUMN_NAME);
+                int availableStock = result.getInt(AVAILABLE_STOCK_COLUMN_NAME);
+                double price = result.getDouble(PRICE_COLUMN_NAME);
+
+                System.out.println("Instrument ID: " + instrumentId);
+                System.out.println("Instrument Type: " + instrumentTypeResult);
+                System.out.println("Instrument Brand: " + instrumentBrand);
+                System.out.println("Available Stock: " + availableStock);
+                System.out.println("Price: " + price);
+
                 Instrument instrument = new Instrument(
                         result.getString(INSTRUMENT_ID_COLUMN_NAME),
                         result.getString(INSTRUMENT_TYPE_COLUMN_NAME),
                         result.getString(INSTRUMENT_BRAND_COLUMN_NAME),
                         result.getInt(AVAILABLE_STOCK_COLUMN_NAME),
-                        result.getBigDecimal(PRICE_COLUMN_NAME));
+                        result.getDouble(PRICE_COLUMN_NAME));
                 instruments.add(instrument);
             }
             connection.commit();

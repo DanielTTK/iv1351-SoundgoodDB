@@ -23,24 +23,23 @@
 
 package se.kth.iv1351.soundgood.jdbc.model;
 
-import java.math.BigDecimal;
-
 public class Instrument implements InstrumentDTO {
     private String instrId;
     private String instrType;
     private String instrBrand;
     private int instrInStock;
-    private BigDecimal price;
+    private double price;
 
-    public Instrument(String instrId, String instrType, String instrBrand, int instrInStock, BigDecimal price) {
+    public Instrument(String instrId, String instrType, String instrBrand, int instrInStock, double price) {
         this.instrId = instrId;
         this.instrType = instrType;
         this.instrBrand = instrBrand;
         this.instrInStock = instrInStock;
+        this.price = price;
     }
 
     public Instrument(String instrId) {
-        this(instrId, null, null, 0, BigDecimal.ZERO);
+        this(instrId, null, null, 0, 0);
     }
 
     @Override
@@ -64,7 +63,7 @@ public class Instrument implements InstrumentDTO {
     }
 
     @Override
-    public BigDecimal getPrice() {
+    public double getPrice() {
         return price;
     }
 

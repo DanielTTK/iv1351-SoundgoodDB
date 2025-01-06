@@ -118,8 +118,16 @@ public class BlockingInterpreter {
         }
     }
 
+    private String formatInput(String input) {
+        if (input == null || input.isEmpty()) {
+            return input;
+        }
+        input = input.toLowerCase();
+        return input.substring(0, 1).toUpperCase() + input.substring(1);
+    }
+
     private String readNextLine() {
         System.out.print(PROMPT);
-        return console.nextLine();
+        return formatInput(console.nextLine());
     }
 }
