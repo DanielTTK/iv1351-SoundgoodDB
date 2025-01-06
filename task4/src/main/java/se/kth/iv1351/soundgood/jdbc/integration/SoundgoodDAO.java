@@ -118,7 +118,7 @@ public class SoundgoodDAO {
      * @param priceID    the priceID for said instrument. This is free to choose.
      * @throws SoundgoodDBException If failed to create the specific rental.
      */
-    public void createRental(RentalDTO rental, InstrumentDTO instrument, StudentDTO student, String priceID)
+    public void createRental(InstrumentDTO instrument, StudentDTO student, String priceID)
             throws SoundgoodDBException {
         String failureMsg = "Could not rent the instrument " + instrument.getInstrumentID()
                 + " for student " + student.getStudentID();
@@ -217,27 +217,7 @@ public class SoundgoodDAO {
     }
 
     private void prepareStatements(Connection connection) throws SQLException {
-        /*
-         * Examples:
-         * createAccountStmt = connection.prepareStatement("INSERT INTO " +
-         * ACCT_TABLE_NAME
-         * + "(" + ACCT_NO_COLUMN_NAME + ", " + BALANCE_COLUMN_NAME + ", "
-         * + HOLDER_FK_COLUMN_NAME + ") VALUES (?, ?, ?)");
-         * 
-         * findHolderPKStmt = connection.prepareStatement("SELECT " +
-         * HOLDER_PK_COLUMN_NAME
-         * + " FROM " + HOLDER_TABLE_NAME + " WHERE " + HOLDER_COLUMN_NAME + " = ?");
-         * 
-         * changeBalanceStmt = connection.prepareStatement("UPDATE " + ACCT_TABLE_NAME
-         * + " SET " + BALANCE_COLUMN_NAME + " = ? WHERE " + ACCT_NO_COLUMN_NAME +
-         * " = ? ");
-         * 
-         * deleteAccountStmt = connection.prepareStatement("DELETE FROM " +
-         * ACCT_TABLE_NAME
-         * + " WHERE " + ACCT_NO_COLUMN_NAME + " = ?");
-         */
-
-        updateRentalToExpiryStmt = connection.prepareStatement( // consider a lock here
+        updateRentalToExpiryStmt = connection.prepareStatement(
                 "UPDATE " + RENTAL_TABLE_NAME + " SET " + EXPIRY_DATE_COLUMN_NAME
                         + " = CURRENT_TIMESTAMP(0) WHERE " + RENTAL_ID_COLUMN_NAME + " = ?");
 

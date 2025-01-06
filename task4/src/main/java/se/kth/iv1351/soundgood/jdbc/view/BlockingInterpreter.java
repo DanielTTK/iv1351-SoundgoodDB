@@ -81,17 +81,31 @@ public class BlockingInterpreter {
                         keepReceivingCmds = false;
                         break;
                     case LIST:
-                        List<Instrument> instruments = ctrl.listInstrumentsByType(cmdLine.getParameter(0));
+                        System.out.println("Write desired instrument type:");
+                        String instrType = readNextLine();
+
+                        List<Instrument> instruments = ctrl.listInstrumentsByType(instrType);
                         for (Instrument instrument : instruments) {
                             System.out.println(instrument);
                         }
                         break;
+
                     case RENT:
-                        ctrl.createRental(cmdLine.getParameter(0), cmdLine.getParameter(1), cmdLine.getParameter(2),
-                                cmdLine.getParameter(3));
+                        System.out.println("Write Instrument ID:");
+                        String instrID = readNextLine();
+
+                        System.out.println("Write Student ID:");
+                        String studentID = readNextLine();
+
+                        System.out.println("Provide Price History ID:");
+                        String priceID = readNextLine();
+
+                        ctrl.createRental(instrID, studentID, priceID);
                         break;
                     case TERMINATE:
-                        ctrl.terminateRental(cmdLine.getParameter(0));
+                        System.out.println("Write Rental ID to terminate:");
+                        String rentalID = readNextLine();
+                        ctrl.terminateRental(rentalID);
                         break;
                     default:
                         System.out.println("Illegal command");
