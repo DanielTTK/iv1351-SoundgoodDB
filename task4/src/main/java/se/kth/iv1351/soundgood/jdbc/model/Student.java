@@ -28,22 +28,22 @@ package se.kth.iv1351.soundgood.jdbc.model;
  */
 public class Student implements StudentDTO {
 
-    private String studentID;
+    private int studentID;
     private String personID;
     private String skillLevel;
 
-    public Student(String studentID, String personID, String skillLevel) {
+    public Student(int studentID, String personID, String skillLevel) {
         this.studentID = studentID;
         this.personID = personID;
         this.skillLevel = skillLevel;
     }
 
-    public Student(String studentID) {
+    public Student(int studentID) {
         this(studentID, null, null);
     }
 
     @Override
-    public String getStudentID() {
+    public int getStudentID() {
         return studentID;
     }
 

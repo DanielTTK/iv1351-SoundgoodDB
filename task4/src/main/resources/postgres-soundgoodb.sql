@@ -68,7 +68,8 @@ CREATE TABLE instrument_rental (
     student_id INT NOT NULL,
     FOREIGN KEY (rental_price_id) REFERENCES rental_price_history(rental_price_id) ON DELETE CASCADE,
     FOREIGN KEY (instrument_id) REFERENCES instrument(instrument_id) ON DELETE CASCADE,
-    FOREIGN KEY (student_id) REFERENCES student(student_id) ON DELETE CASCADE
+    FOREIGN KEY (student_id) REFERENCES student(student_id) ON DELETE CASCADE,
+    CONSTRAINT unique_student_instrument_rental UNIQUE (student_id, instrument_id),
 );
 
 --the trigger and function

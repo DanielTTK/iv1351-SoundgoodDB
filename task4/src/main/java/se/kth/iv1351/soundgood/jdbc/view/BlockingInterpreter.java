@@ -95,7 +95,7 @@ public class BlockingInterpreter {
                         String instrID = readNextLine();
 
                         System.out.println("Write Student ID:");
-                        String studentID = readNextLine();
+                        int studentID = Integer.parseInt(readNextLine());
 
                         System.out.println("Provide Price History ID:");
                         String priceID = readNextLine();

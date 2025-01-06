@@ -136,7 +136,7 @@ public class SoundgoodDAO {
             createRentalStmt.setTimestamp(3, expectedLeaseEndDate);
             createRentalStmt.setString(4, priceID);
             createRentalStmt.setString(5, instrument.getInstrumentID());
-            createRentalStmt.setString(6, student.getStudentID());
+            createRentalStmt.setInt(6, student.getStudentID());
 
             updatedRows = createRentalStmt.executeUpdate();
             if (updatedRows != 1) {
@@ -233,8 +233,7 @@ public class SoundgoodDAO {
                         + "VALUES (?, ?, ?, ?, ?, ?)");
 
         findMaxRentalIdStmt = connection.prepareStatement(
-                "SELECT MAX(" + RENTAL_ID_COLUMN_NAME + ") AS max_rental_id FROM" + RENTAL_TABLE_NAME
-                        + " FOR NO KEY UPDATE");
+                "SELECT MAX(" + RENTAL_ID_COLUMN_NAME + ") AS max_rental_id FROM " + RENTAL_TABLE_NAME);
 
         findInstrumentsByTypeStmt = connection.prepareStatement(
                 "SELECT i." + INSTRUMENT_ID_COLUMN_NAME + ", i." + INSTRUMENT_TYPE_COLUMN_NAME + ", i."

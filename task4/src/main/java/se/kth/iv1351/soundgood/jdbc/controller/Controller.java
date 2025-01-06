@@ -14,7 +14,7 @@ public class Controller {
         database = new SoundgoodDAO();
     }
 
-    public void createRental(String instrumentID, String studentID, String priceID)
+    public void createRental(String instrumentID, int studentID, String priceID)
             throws RentalException, InstrumentException {
         String failureMsg = "Could not create rental for student " + studentID;
 

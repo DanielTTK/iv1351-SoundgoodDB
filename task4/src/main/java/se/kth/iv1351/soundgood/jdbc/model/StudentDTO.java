@@ -4,7 +4,7 @@ public interface StudentDTO {
     /**
      * @return students id.
      */
-    public String getStudentID();
+    public int getStudentID();
 
     /**
      * @return students personal id.
