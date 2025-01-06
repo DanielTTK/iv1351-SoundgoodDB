@@ -23,16 +23,28 @@
 
 package se.kth.iv1351.soundgood.jdbc.integration;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 
 import se.kth.iv1351.soundgood.jdbc.model.InstrumentDTO;
 import se.kth.iv1351.soundgood.jdbc.model.RentalDTO;
-import se.kth.iv1351.soundgood.jdbc.model.RentalException;
 
 public class SoundgoodDAO {
+    // instrument_id, student_id) "
+    private static final String RENTAL_TABLE_NAME = "instrument_rental";
+    private static final String EXPIRY_DATE_COLUMN_NAME = "lease_expiry_time";
+    private static final String START_DATE_COLUMN_NAME = "rental_start_time";
+    private static final String RENTAL_ID_COLUMN_NAME = "rental_id";
+    private static final String PRICE_ID_COLUMN_NAME = "rental_price_id";
+    private static final String INSTR_ID_COLUMN_NAME = "instrument_id";
+    private static final String STDNT_ID_COLUMN_NAME = "student_id";
 
     private Connection connection;
     private PreparedStatement updateRentalToExpiryStmt;
+    private PreparedStatement createRentalByInstrumentStmt;
+    private PreparedStatement findMaxRentalIdStmt;
 
     /**
      * Constructs a new DAO object connected to the Soundgood database.
@@ -47,8 +59,14 @@ public class SoundgoodDAO {
         }
     }
 
-    public void createRental(InstrumentDTO instrument) throws SoundgoodDBException {
+    public void createRental(RentalDTO rental, InstrumentDTO instrument) throws SoundgoodDBException {
         String failureMsg = "Could not rent the instrument " + instrument;
+
+        try {
+            // findMaxRentalIdStmt.
+        } catch (Exception e) {
+
+        }
     }
 
     /**
@@ -58,13 +76,16 @@ public class SoundgoodDAO {
      * database
      * functionality.
      */
-    public void deleteRental(String rentalId) throws SoundgoodDBException {
-        String failureMsg = "Failed to terminate rental: " + rentalId;
+    public void deleteRental(RentalDTO rental) throws SoundgoodDBException {
+        String failureMsg = "Failed to terminate rental: " + rental.getRentalID();
 
         try {
-            updateRentalToExpiryStmt.setString(1, rentalId);
-            updateRentalToExpiryStmt.executeUpdate();
+            updateRentalToExpiryStmt.setString(1, rental.getRentalID());
+            int updatedRows = updateRentalToExpiryStmt.executeUpdate();
 
+            if (updatedRows != 1) {
+                handleException(failureMsg, null);
+            }
             connection.commit();
         } catch (SQLException sqle) {
             handleException(failureMsg, sqle);
@@ -113,7 +134,22 @@ public class SoundgoodDAO {
          */
 
         updateRentalToExpiryStmt = connection.prepareStatement(
-                "UPDATE instrument_rental SET lease_expiry_time = CURRENT_TIMESTAMP(0) WHERE rental_id = ?");
+                "UPDATE " + RENTAL_TABLE_NAME + " SET " + EXPIRY_DATE_COLUMN_NAME
+                        + " = CURRENT_TIMESTAMP(0) WHERE " + RENTAL_ID_COLUMN_NAME + " = ?");
+
+        createRentalByInstrumentStmt = connection.prepareStatement(
+                "INSERT INTO " + RENTAL_TABLE_NAME
+                        + " (" + RENTAL_ID_COLUMN_NAME
+                        + ", " + START_DATE_COLUMN_NAME
+                        + ", " + EXPIRY_DATE_COLUMN_NAME
+                        + ", " + PRICE_ID_COLUMN_NAME
+                        + ", " + INSTR_ID_COLUMN_NAME
+                        + ", " + STDNT_ID_COLUMN_NAME
+                        + ") "
+                        + "VALUES (?, ?, ?, ?, ?, ?)");
+
+        findMaxRentalIdStmt = connection.prepareStatement(
+                "SELECT MAX(rental_id) AS max_rental_id FROM instrument_rental");
     }
 
     /**
