@@ -23,6 +23,9 @@
 
 package se.kth.iv1351.soundgood.jdbc.model;
 
+/**
+ * Object representing a instrument.
+ */
 public class Instrument implements InstrumentDTO {
     private String instrId;
     private String instrType;

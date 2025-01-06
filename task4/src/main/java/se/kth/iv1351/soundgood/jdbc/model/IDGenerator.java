@@ -2,6 +2,8 @@ package se.kth.iv1351.soundgood.jdbc.model;
 
 /**
  * Generates a unique ID.
+ * 
+ * @returns a rental id.
  */
 public class IDGenerator {
     public static String generateId(String maxRentalId) {
