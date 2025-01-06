@@ -84,7 +84,7 @@ public class BlockingInterpreter {
                         System.out.println("Write desired instrument type:");
                         String instrType = readNextLine();
 
-                        List<Instrument> instruments = ctrl.listInstrumentsByType(instrType);
+                        List<Instrument> instruments = ctrl.listInstrumentsByType(convertOneUpperCase(instrType));
                         for (Instrument instrument : instruments) {
                             System.out.println(instrument);
                         }
@@ -100,12 +100,12 @@ public class BlockingInterpreter {
                         System.out.println("Provide Price History ID:");
                         String priceID = readNextLine();
 
-                        ctrl.createRental(instrID, studentID, priceID);
+                        ctrl.createRental(convertAllUpperCase(instrID), studentID, convertAllUpperCase(priceID));
                         break;
                     case TERMINATE:
                         System.out.println("Write Rental ID to terminate:");
                         String rentalID = readNextLine();
-                        ctrl.terminateRental(rentalID);
+                        ctrl.terminateRental(convertAllUpperCase(rentalID));
                         break;
                     default:
                         System.out.println("Illegal command");
@@ -118,7 +118,7 @@ public class BlockingInterpreter {
         }
     }
 
-    private String formatInput(String input) {
+    private String convertOneUpperCase(String input) {
         if (input == null || input.isEmpty()) {
             return input;
         }
@@ -126,8 +126,16 @@ public class BlockingInterpreter {
         return input.substring(0, 1).toUpperCase() + input.substring(1);
     }
 
+    private String convertAllUpperCase(String input) {
+        if (input == null || input.isEmpty()) {
+            return input;
+        }
+        input = input.toUpperCase();
+        return input;
+    }
+
     private String readNextLine() {
         System.out.print(PROMPT);
-        return formatInput(console.nextLine());
+        return console.nextLine();
     }
 }
